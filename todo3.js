@@ -21,10 +21,24 @@ function removeAtIndex(arr, index) {
   return newArray;
 }
 
+
 app.get('/todos', (req, res) => {
   fs.readFile("todos.json", "utf8", (err, data) => {
     if (err) throw err;
     res.json(JSON.parse(data));
+  });
+});
+
+app.get('/todos/:id', (req, res) => {
+  fs.readFile("todos.json", "utf8", (err, data) => {
+    if (err) throw err;
+    const todos = JSON.parse(data);
+    const todoIndex = findIndex(todos, parseInt(req.params.id));
+    if (todoIndex === -1) {
+      res.status(404).send();
+    } else {
+      res.json(todos[todoIndex]);
+    }
   });
 });
 
